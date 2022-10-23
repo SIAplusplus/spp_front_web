@@ -1,37 +1,67 @@
 <template>
       <div class="container">
-    <form class= "contentform">
+    <form action class= "form" @submit.prevent="login">
       <h2 class="">Iniciar Sesion</h2>
       <div class="input">
-        <label for="email">Usuario</label>
+        <label for="#email">Usuario</label>
         <input
-          class="form-control"
-          type="text"
+          v-model = "email"
+          class="form-input" 
+          type="email"
           name="email"
-          placeholder="usuario"
-        />
+          id="email"
+          placeholder="Usuario"
+          required
+        >
       </div>
       <div class="input">
-        <label for="password">Contraseña</label>
+        <label for="#password">Contraseña</label>
         <input
+          v-model = "password"
           class="form-control"
           type="password"
+          id="password"
           name="password"
-          placeholder="***************"
-        />
+          placeholder="***********"
+        >
       </div>
+      <p v-if="error" class="error">Has introducido mal el email o la contraseña.</p>
       <button type="submit" class="mt-4 btn-pers" id="login_button">
         Aceptar
       </button>
 
     </form>
   </div>
+  <header class="header"></header>
+  <div class="logo"><img src="../assets/logounalfake.png"></div>
+  <footer class="foot"></footer>
 </template>
 
 <script>
-export default {
+import auth from "@/logic/auth";
 
+export default {
+  data: () =>({
+    email: "",
+    password: "",
+    error: false
+  }), 
+  methods: {
+    async login() {
+  try {
+    await auth.login(this.email, this.password);
+    const user = {
+      email: this.email
+    };
+    auth.setUserLogged(user);
+    this.$router.push("/");
+  } catch (error) {
+    console.log(error);
+    this.error = true;
+  }
+  }
 }
+};
 </script>
 
 <style>
@@ -95,5 +125,50 @@ export default {
   box-shadow: 0px 15px 20px rgba(118, 35, 47, 0.4);
   color: #fff;
   transform: translate(-50%, -7px);
+}
+.error {
+  margin: 1rem 0 0;
+  color: #ff4a96;
+}
+.header{
+  background-color: #2c3e50;
+  height: 40px;
+  width: 80%;
+  opacity: 80%;
+  position: fixed;
+  top: 0%;
+  right: 0%;
+
+}
+.logo{
+  background-color: #2c3e50;
+  shape-image-threshold: 200px;
+  position: fixed;
+  left: 0%;
+  height: auto;
+  width: 20%;
+  top: 0%;
+  opacity: 80%;
+}
+.logo img{
+  width: 100%;
+  height: auto;
+  top: 50%;
+}
+@supports(object-fit: cover){
+    .logo img{
+      height: auto;
+      object-fit: cover;
+      object-position: center center;
+    }
+}
+
+.foot{
+  height: 40px;
+  width: 100%;
+  opacity: 80%;
+  position: fixed;
+  bottom: 0px;
+  background-color: #2c3e50;
 }
 </style>

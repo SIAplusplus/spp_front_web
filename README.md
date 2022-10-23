@@ -1,5 +1,11 @@
 # spp_front_web
 
+## Project Dependencies
+```
+npm install axios --save
+npm install js-cookie --save
+```
+
 ## Project setup
 ```
 npm install
